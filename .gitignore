@@ -1,0 +1,39 @@
+# Frontend dependencies and build output
+habit-tracker-fe/node_modules/
+habit-tracker-fe/dist/
+habit-tracker-fe/dist-ssr/
+habit-tracker-fe/coverage/
+habit-tracker-fe/.eslintcache
+habit-tracker-fe/*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment and local overrides
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+habit-tracker-fe/.vscode/*
+!habit-tracker-fe/.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS / tooling junk
+.DS_Store
+Thumbs.db
+.codex
