@@ -20,7 +20,7 @@ function App() {
         const habitSchema = z.object({
           id: z.uuid(),
           name: z.string(),
-          done: z.boolean(),
+          completedDates: z.array(z.string())
         })
 
         const habitListSchema = z.array(habitSchema)
@@ -39,9 +39,10 @@ function App() {
   const [habitSearchText, setHabitSearchText] = useState('')
   const [habitStatusFilter, setHabitStatusFilter] = useState('all')
 
-  function toggleHabit(id: string) {
+  function toggleHabitDoneToday(id: string) {
+    const currentDate = new Date().toISOString().slice(0, 10)
     setHabitsList((prev) =>
-      prev.map((habit) => (habit.id === id ? { ...habit, done: !habit.done } : habit)),
+      prev.map((habit) => (habit.id === id ? { ...habit, completedDates: !habit.completedDates.includes(currentDate) ? [...habit.completedDates, currentDate] : habit.completedDates.filter((date)=>date !== currentDate) } : habit)),
     )
   }
 
@@ -81,7 +82,7 @@ function App() {
           habitsList={habitsList}
           habitSearchText={habitSearchText}
           habitStatusFilter={habitStatusFilter}
-          toggleHabit={toggleHabit}
+          toggleHabitDoneToday={toggleHabitDoneToday}
           deleteHabit={deleteHabit}
           editHabit={editHabit}
         />

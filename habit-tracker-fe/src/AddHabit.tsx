@@ -15,7 +15,7 @@ function AddHabit({ setHabitsList }: AddHabitProps) {
       const newHabit: Habit = {
         id: crypto.randomUUID(),
         name: trimmedHabit,
-        done: false,
+        completedDates: []
       }
 
       setHabitsList((prev) => [...prev, newHabit])
