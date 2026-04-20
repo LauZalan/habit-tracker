@@ -20,7 +20,7 @@ function FilterHabits({
       <h2>Filter habits!</h2>
       <button onClick={() => setHabitStatusFilter('all')}>All</button>
       <button onClick={() => setHabitStatusFilter('active')}>Active</button>
-      <button onClick={() => setHabitStatusFilter('done')}>Done</button>
+      <button onClick={() => setHabitStatusFilter('done')}>Done today</button>
     </div>
   )
 }

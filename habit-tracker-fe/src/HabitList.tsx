@@ -5,7 +5,7 @@ type HabitListProps = {
   habitsList: Habit[]
   habitSearchText: string
   habitStatusFilter: string
-  toggleHabit: (id: string) => void
+  toggleHabitDoneToday: (id: string) => void
   deleteHabit: (id: string) => void
   editHabit: (id: string, updatedHabit: string) => void
 }
@@ -14,12 +14,14 @@ function HabitList({
   habitsList,
   habitSearchText,
   habitStatusFilter,
-  toggleHabit,
+  toggleHabitDoneToday,
   deleteHabit,
   editHabit,
 }: HabitListProps) {
   const [editedHabitId, setEditedHabitId] = useState('')
   const [editedHabitName, setEditedHabitName] = useState('')
+
+  const currentDate = new Date().toISOString().slice(0, 10)
 
   const items = habitsList
     .filter((habit) => {
@@ -29,15 +31,15 @@ function HabitList({
       return habitStatusFilter === 'all'
         ? habit
         : habitStatusFilter === 'done'
-          ? habit.done
-          : !habit.done
+          ? habit.completedDates.includes(currentDate)
+          : !habit.completedDates.includes(currentDate)
     })
     .map((habit) => (
       <tbody key={habit.id}>
         <tr>
           <td>{habit.name}</td>
           <td>
-            <input checked={habit.done} onChange={() => toggleHabit(habit.id)} type="checkbox" />
+            <input checked={habit.completedDates.includes(currentDate)} onChange={() => toggleHabitDoneToday(habit.id)} type="checkbox" />
           </td>
           <td>
             <button onClick={() => deleteHabit(habit.id)}>Delete</button>
@@ -85,7 +87,7 @@ function HabitList({
         <thead>
           <tr>
             <th>Habit</th>
-            <th>Done</th>
+            <th>Done today</th>
             <th>Delete</th>
             <th>Edit</th>
           </tr>
