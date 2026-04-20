@@ -1,17 +1,15 @@
-import AddHabit from './AddHabit'
-import FilterHabits from './FilterHabits'
-import HabitSummary from './HabitSummary'
-import HabitList from './HabitList'
+import AddHabit from '../features/habits/components/AddHabit'
+import FilterHabits from '../features/habits/components/FilterHabits'
+import HabitSummary from '../features/habits/components/HabitSummary'
+import HabitList from '../features/habits/components/HabitList'
 
-import type { Habit } from './types'
+import type { Habit } from '../features/habits/types'
 
 import { useEffect, useState } from 'react'
 
 import { z } from 'zod'
 
-import './App.css'
-
-function App() {
+function DashboardPage() {
   const [habitsList, setHabitsList] = useState<Habit[]>(() => {
     const storedHabits = localStorage.getItem('habitsList')
 
@@ -91,4 +89,4 @@ function App() {
   )
 }
 
-export default App
+export default DashboardPage
