@@ -1,4 +1,3 @@
-# Frontend dependencies and build output
 habit-tracker-fe/node_modules/
 habit-tracker-fe/dist/
 habit-tracker-fe/dist-ssr/
@@ -6,7 +5,26 @@ habit-tracker-fe/coverage/
 habit-tracker-fe/.eslintcache
 habit-tracker-fe/*.tsbuildinfo
 
-# Logs
+habit-tracker-be/target/
+habit-tracker-be/build/
+habit-tracker-be/HELP.md
+habit-tracker-be/.apt_generated
+habit-tracker-be/.classpath
+habit-tracker-be/.factorypath
+habit-tracker-be/.project
+habit-tracker-be/.settings/
+habit-tracker-be/.springBeans
+habit-tracker-be/.sts4-cache
+habit-tracker-be/*.iws
+habit-tracker-be/*.iml
+habit-tracker-be/*.ipr
+habit-tracker-be/nbproject/private/
+habit-tracker-be/nbbuild/
+habit-tracker-be/dist/
+habit-tracker-be/nbdist/
+habit-tracker-be/.nb-gradle/
+habit-tracker-be/.vscode/
+
 logs/
 *.log
 npm-debug.log*
@@ -15,13 +33,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment and local overrides
 .env
 .env.*
 !.env.example
 *.local
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 habit-tracker-fe/.vscode/*
@@ -33,7 +49,6 @@ habit-tracker-fe/.vscode/*
 *.sln
 *.sw?
 
-# OS / tooling junk
 .DS_Store
 Thumbs.db
 .codex
