@@ -4,6 +4,7 @@ export type CalendarCell = {
   id: number
   cellDate: string
   cellHabits: Habit[]
+  editable: boolean
 }
 
 export type CalendarDetails = {

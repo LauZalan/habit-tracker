@@ -5,6 +5,7 @@ import type { Habit } from '../types'
 type HabitsContextValue = {
   habitsList: Habit[]
   setHabitsList: React.Dispatch<React.SetStateAction<Habit[]>>
+  toggleHabitDoneOnDate: (id: string, date: string) => void
 }
 
 export const HabitsContext = createContext<HabitsContextValue | null>(null)

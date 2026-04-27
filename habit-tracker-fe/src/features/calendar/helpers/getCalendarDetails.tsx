@@ -47,6 +47,11 @@ function getCalendarDetails(year: number, month: number, habits: Habit[]): Calen
       id: cellindex,
       cellDate: date,
       cellHabits: cellHabitOnDate,
+      editable: false,
+    }
+
+    if (getLocalDateKey(new Date()) >= cell.cellDate) {
+      cell.editable = true
     }
 
     calendarDetails.cells.push(cell)
