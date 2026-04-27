@@ -10,7 +10,11 @@ function CalendarPage() {
   const [month, setMonth] = useState(new Date().getMonth())
   const [year, setYear] = useState(new Date().getFullYear())
 
+  const [detailedDateId, setDetailedDateId] = useState<number | null>(null)
+  const [detailedRow, setDetailedRow] = useState<number | null>(null)
+
   function stepMonth(currentMonth: number, offset: number) {
+    setDetailedRow(null)
     if (currentMonth + offset > 11) {
       setYear(year + 1)
       setMonth(0)
@@ -33,7 +37,13 @@ function CalendarPage() {
         <button onClick={() => stepMonth(month, 1)}>Next month</button>
       </div>
       <div>
-        <DrawCalendar calendarDetails={getCalendarDetails(year, month, habits.habitsList)} />
+        <DrawCalendar
+          calendarDetails={getCalendarDetails(year, month, habits.habitsList)}
+          detailedDateId={detailedDateId}
+          detailedRow={detailedRow}
+          setDetailedDateId={setDetailedDateId}
+          setDetailedRow={setDetailedRow}
+        />
       </div>
     </div>
   )
