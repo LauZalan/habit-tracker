@@ -1,3 +1,4 @@
+import { Fragment } from 'react/jsx-runtime'
 import type { CalendarDetails } from './types'
 
 const ROWS = 6
@@ -30,8 +31,8 @@ function DrawCalendar({
     <table>
       <tbody>
         {[...Array(ROWS).keys()].map((row) => (
-          <div>
-            <tr key={row}>
+          <Fragment key={row}>
+            <tr>
               {[...Array(COLS).keys()].map((col) => (
                 <td
                   key={row * COLS + col}
@@ -60,7 +61,7 @@ function DrawCalendar({
                 </td>
               ))}
             </tr>
-            {detailedDateId && detailedRow === row ? (
+            {detailedDateId !== null && detailedRow === row ? (
               <tr>
                 <td
                   colSpan={7}
@@ -79,7 +80,7 @@ function DrawCalendar({
                 </td>
               </tr>
             ) : null}
-          </div>
+          </Fragment>
         ))}
       </tbody>
     </table>

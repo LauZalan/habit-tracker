@@ -1,9 +1,23 @@
 import { getLocalDateKey } from '../../habits/helpers/localDateHelper'
 
 import type { CalendarDetails, CalendarCell } from '../types'
-import type { Habit } from '../../habits/types'
+import type { Habit, Weekday } from '../../habits/types'
 
 const NUMOFCELLS = 42
+
+const weekdays: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
+function isHabitScheduledOnDate(habit: Habit, dateString: string): boolean {
+  if (habit.frequency.type === 'daily' && dateString >= habit.dateAdded) {
+    return true
+  } else if (habit.frequency.type === 'weekly' && dateString >= habit.dateAdded) {
+    const dayOfTheWeek = (new Date(dateString).getDay() + 6) % 7
+    if (habit.frequency.days.includes(weekdays[dayOfTheWeek])) {
+      return true
+    }
+  }
+  return false
+}
 
 function getCalendarDetails(year: number, month: number, habits: Habit[]): CalendarDetails {
   const calendarDetails: CalendarDetails = {
@@ -24,7 +38,7 @@ function getCalendarDetails(year: number, month: number, habits: Habit[]): Calen
     const cellHabitOnDate: Habit[] = new Array<Habit>()
 
     habits.forEach((habit) => {
-      if (habit.completedDates.includes(date)) {
+      if (isHabitScheduledOnDate(habit, date)) {
         cellHabitOnDate.push(habit)
       }
     })
