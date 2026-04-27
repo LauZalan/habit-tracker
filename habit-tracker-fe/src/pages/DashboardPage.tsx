@@ -1,68 +1,51 @@
+import { useState } from 'react'
+
+import { useHabits } from '../features/habits/context/HabitsContext'
+
 import AddHabit from '../features/habits/components/AddHabit'
 import FilterHabits from '../features/habits/components/FilterHabits'
 import HabitSummary from '../features/habits/components/HabitSummary'
 import HabitList from '../features/habits/components/HabitList'
 
-import type { Habit } from '../features/habits/types'
-
-import { useEffect, useState } from 'react'
-
-import { z } from 'zod'
+import { getLocalDateKey } from '../features/habits/helpers/localDateHelper'
 
 function DashboardPage() {
-  const [habitsList, setHabitsList] = useState<Habit[]>(() => {
-    const storedHabits = localStorage.getItem('habitsList')
-
-    if (storedHabits) {
-      try {
-        const habitSchema = z.object({
-          id: z.uuid(),
-          name: z.string(),
-          completedDates: z.array(z.string())
-        })
-
-        const habitListSchema = z.array(habitSchema)
-
-        const habits = habitListSchema.parse(JSON.parse(storedHabits))
-        return habits
-      } catch (error) {
-        console.error(error)
-        return []
-      }
-    } else {
-      return []
-    }
-  })
+  const habits = useHabits()
 
   const [habitSearchText, setHabitSearchText] = useState('')
   const [habitStatusFilter, setHabitStatusFilter] = useState('all')
 
   function toggleHabitDoneToday(id: string) {
-    const currentDate = new Date().toISOString().slice(0, 10)
-    setHabitsList((prev) =>
-      prev.map((habit) => (habit.id === id ? { ...habit, completedDates: !habit.completedDates.includes(currentDate) ? [...habit.completedDates, currentDate] : habit.completedDates.filter((date)=>date !== currentDate) } : habit)),
+    const currentDate = getLocalDateKey(new Date())
+    habits.setHabitsList((prev) =>
+      prev.map((habit) =>
+        habit.id === id
+          ? {
+              ...habit,
+              completedDates: !habit.completedDates.includes(currentDate)
+                ? [...habit.completedDates, currentDate]
+                : habit.completedDates.filter((date) => date !== currentDate),
+            }
+          : habit,
+      ),
     )
   }
 
   function editHabit(id: string, updatedHabit: string) {
-    setHabitsList((prev) =>
+    habits.setHabitsList((prev) =>
       prev.map((habit) => (habit.id === id ? { ...habit, name: updatedHabit } : habit)),
     )
   }
 
   function deleteHabit(id: string) {
-    setHabitsList((prev) => prev.filter((habit) => habit.id !== id))
+    habits.setHabitsList((prev) => prev.filter((habit) => habit.id !== id))
   }
-
-  useEffect(() => {
-    localStorage.setItem('habitsList', JSON.stringify(habitsList))
-  }, [habitsList])
 
   return (
     <>
       <div>
-        <h1>Habit Tracker</h1>
-        <AddHabit setHabitsList={setHabitsList} />
+        <h1>Dashboard</h1>
+        <AddHabit setHabitsList={habits.setHabitsList} />
       </div>
       <div>
         <FilterHabits
@@ -72,12 +55,12 @@ function DashboardPage() {
         />
       </div>
       <div>
-        <HabitSummary habitsList={habitsList} />
+        <HabitSummary habitsList={habits.habitsList} />
       </div>
       <div>
         <h2>Habit list</h2>
         <HabitList
-          habitsList={habitsList}
+          habitsList={habits.habitsList}
           habitSearchText={habitSearchText}
           habitStatusFilter={habitStatusFilter}
           toggleHabitDoneToday={toggleHabitDoneToday}
