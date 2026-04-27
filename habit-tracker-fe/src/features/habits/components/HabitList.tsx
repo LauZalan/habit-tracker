@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import type { Habit } from '../types' 
+import type { Habit } from '../types'
+import { getLocalDateKey } from '../helpers/localDateHelper'
 
 type HabitListProps = {
   habitsList: Habit[]
@@ -21,7 +22,7 @@ function HabitList({
   const [editedHabitId, setEditedHabitId] = useState('')
   const [editedHabitName, setEditedHabitName] = useState('')
 
-  const currentDate = new Date().toISOString().slice(0, 10)
+  const currentDate = getLocalDateKey(new Date())
 
   const items = habitsList
     .filter((habit) => {
@@ -39,7 +40,11 @@ function HabitList({
         <tr>
           <td>{habit.name}</td>
           <td>
-            <input checked={habit.completedDates.includes(currentDate)} onChange={() => toggleHabitDoneToday(habit.id)} type="checkbox" />
+            <input
+              checked={habit.completedDates.includes(currentDate)}
+              onChange={() => toggleHabitDoneToday(habit.id)}
+              type="checkbox"
+            />
           </td>
           <td>
             <button onClick={() => deleteHabit(habit.id)}>Delete</button>
