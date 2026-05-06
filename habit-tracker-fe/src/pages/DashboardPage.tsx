@@ -8,6 +8,7 @@ import HabitSummary from '../features/habits/components/HabitSummary'
 import HabitList from '../features/habits/components/HabitList'
 
 import { getLocalDateKey } from '../features/habits/helpers/localDateHelper'
+import type { HabitFrequencies } from '../features/habits/types'
 
 function DashboardPage() {
   const habits = useHabits()
@@ -31,9 +32,17 @@ function DashboardPage() {
     )
   }
 
-  function editHabit(id: string, updatedHabit: string) {
+  function editHabit(
+    id: string,
+    updatedHabitName: string,
+    updatedHabitFreqeuncy: HabitFrequencies,
+  ) {
     habits.setHabitsList((prev) =>
-      prev.map((habit) => (habit.id === id ? { ...habit, name: updatedHabit } : habit)),
+      prev.map((habit) =>
+        habit.id === id
+          ? { ...habit, name: updatedHabitName, frequency: updatedHabitFreqeuncy }
+          : habit,
+      ),
     )
   }
 

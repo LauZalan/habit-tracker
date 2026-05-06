@@ -7,7 +7,7 @@ const NUMOFCELLS = 42
 
 const weekdays: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
-function isHabitScheduledOnDate(habit: Habit, dateString: string): boolean {
+export function isHabitScheduledOnDate(habit: Habit, dateString: string): boolean {
   if (habit.frequency.type === 'daily' && dateString >= habit.dateAdded) {
     return true
   } else if (habit.frequency.type === 'weekly' && dateString >= habit.dateAdded) {
