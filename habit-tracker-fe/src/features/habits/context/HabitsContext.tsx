@@ -12,6 +12,6 @@ export const HabitsContext = createContext<HabitsContextValue | null>(null)
 
 export function useHabits() {
   const context = useContext(HabitsContext)
-  if (!context) throw new Error('useHabits msut be used within a HabitsContextProvider')
+  if (!context) throw new Error('useHabits must be used within a HabitsContextProvider')
   return context
 }
