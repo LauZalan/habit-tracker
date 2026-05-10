@@ -8,14 +8,21 @@ const NUMOFCELLS = 42
 const weekdays: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
 export function isHabitScheduledOnDate(habit: Habit, dateString: string): boolean {
-  if (habit.completedDates.includes(dateString)) {
-    return true
-  } else if (habit.frequency.type === 'daily' && dateString >= habit.dateAdded) {
-    return true
-  } else if (habit.frequency.type === 'weekly' && dateString >= habit.dateAdded) {
-    const dayOfTheWeek = (new Date(dateString).getDay() + 6) % 7
-    if (habit.frequency.days.includes(weekdays[dayOfTheWeek])) {
-      return true
+  for (let i = habit.frequencyHistory.length - 1; i >= 0; i--) {
+    const freqencyHistoryEntry = habit.frequencyHistory[i]
+    if (dateString >= freqencyHistoryEntry.effectiveFrom) {
+      if (freqencyHistoryEntry.frequency.type === 'daily') {
+        return true
+      } else if (freqencyHistoryEntry.frequency.type === 'weekly') {
+        const dayOfTheWeek = (new Date(dateString).getDay() + 6) % 7
+        if (freqencyHistoryEntry.frequency.days.includes(weekdays[dayOfTheWeek])) {
+          return true
+        } else {
+          return false
+        }
+      }
+    } else {
+      continue
     }
   }
   return false

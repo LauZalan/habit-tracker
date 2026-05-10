@@ -106,22 +106,34 @@ function HabitList({
       </tbody>
     ))
 
-  const habitsToday = habitsList.map((habit) =>
-    isHabitScheduledOnDate(habit, currentDate) ? (
-      <tbody key={habit.id}>
-        <tr>
-          <td>{habit.name}</td>
-          <td>
-            <input
-              type="checkbox"
-              checked={habit.completedDates.includes(currentDate)}
-              onChange={() => toggleHabitDoneToday(habit.id)}
-            ></input>
-          </td>
-        </tr>
-      </tbody>
-    ) : null,
-  )
+  const habitsToday = habitsList
+    .filter((habit) => {
+      return habit.name.toLocaleLowerCase().includes(habitSearchText.toLocaleLowerCase())
+    })
+    .filter((habit) => {
+      return habitStatusFilter === 'all'
+        ? habit
+        : habitStatusFilter === 'done'
+          ? isHabitScheduledOnDate(habit, currentDate) && habit.completedDates.includes(currentDate)
+          : isHabitScheduledOnDate(habit, currentDate) &&
+            !habit.completedDates.includes(currentDate)
+    })
+    .map((habit) =>
+      isHabitScheduledOnDate(habit, currentDate) ? (
+        <tbody key={habit.id}>
+          <tr>
+            <td>{habit.name}</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={habit.completedDates.includes(currentDate)}
+                onChange={() => toggleHabitDoneToday(habit.id)}
+              ></input>
+            </td>
+          </tr>
+        </tbody>
+      ) : null,
+    )
 
   return (
     <div>

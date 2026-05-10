@@ -40,7 +40,20 @@ function DashboardPage() {
     habits.setHabitsList((prev) =>
       prev.map((habit) =>
         habit.id === id
-          ? { ...habit, name: updatedHabitName, frequency: updatedHabitFreqeuncy }
+          ? habit.frequency === updatedHabitFreqeuncy
+            ? {
+                ...habit,
+                name: updatedHabitName,
+              }
+            : {
+                ...habit,
+                name: updatedHabitName,
+                frequency: updatedHabitFreqeuncy,
+                frequencyHistory: [
+                  ...habit.frequencyHistory,
+                  { effectiveFrom: getLocalDateKey(new Date()), frequency: updatedHabitFreqeuncy },
+                ],
+              }
           : habit,
       ),
     )

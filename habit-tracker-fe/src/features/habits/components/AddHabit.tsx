@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import type { Habit, HabitFrequencies } from '../types'
+import type { FrequencyHistoryEntry, Habit, HabitFrequencies } from '../types'
 import { getLocalDateKey } from '../helpers/localDateHelper'
 import FrequencySelector from './FrequencySelector'
 
@@ -18,12 +18,20 @@ function AddHabit({ setHabitsList }: AddHabitProps) {
     const trimmedHabit = habitName.trim()
 
     if (trimmedHabit && habitFrequency) {
+      const freqencyHistory: FrequencyHistoryEntry[] = [
+        {
+          effectiveFrom: getLocalDateKey(new Date()),
+          frequency: habitFrequency,
+        },
+      ]
+
       const newHabit: Habit = {
         id: crypto.randomUUID(),
         name: trimmedHabit,
         completedDates: completedDate,
         dateAdded: getLocalDateKey(new Date()),
         frequency: habitFrequency,
+        frequencyHistory: freqencyHistory,
       }
 
       setHabitsList((prev) => [...prev, newHabit])

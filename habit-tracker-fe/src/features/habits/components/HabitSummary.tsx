@@ -25,7 +25,13 @@ function HabitSummary({ habitsList }: { habitsList: Habit[] }) {
               {habitsList.filter((habit) => habit.completedDates.includes(currentDate)).length}
             </td>
             <td>
-              {habitsList.filter((habit) => !isHabitScheduledOnDate(habit, currentDate)).length}
+              {
+                habitsList.filter(
+                  (habit) =>
+                    isHabitScheduledOnDate(habit, currentDate) &&
+                    !habit.completedDates.includes(currentDate),
+                ).length
+              }
             </td>
           </tr>
         </tbody>
