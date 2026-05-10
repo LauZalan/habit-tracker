@@ -43,6 +43,7 @@ function CalendarPage() {
           detailedRow={detailedRow}
           setDetailedDateId={setDetailedDateId}
           setDetailedRow={setDetailedRow}
+          toggleHabitDoneOnDate={habits.toggleHabitDoneOnDate}
         />
       </div>
     </div>

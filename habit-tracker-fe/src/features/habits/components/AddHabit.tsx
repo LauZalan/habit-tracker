@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-import type { Habit } from '../types'
+import type { FrequencyHistoryEntry, Habit, HabitFrequencies } from '../types'
+import { getLocalDateKey } from '../helpers/localDateHelper'
+import FrequencySelector from './FrequencySelector'
 
 type AddHabitProps = {
   setHabitsList: React.Dispatch<React.SetStateAction<Habit[]>>
@@ -8,27 +10,32 @@ type AddHabitProps = {
 
 function AddHabit({ setHabitsList }: AddHabitProps) {
   const [habitName, setHabitName] = useState('')
-  const [habitCompletedOn, setHabitCompletedOn] = useState('')
-  const [completedDate, setCompletedDates] = useState<string[]>([])
+  const [habitFrequency, setHabitFrequency] = useState<HabitFrequencies | null>({ type: 'daily' })
 
   function handleOnAddHabit() {
     const trimmedHabit = habitName.trim()
 
-    if (trimmedHabit) {
+    if (trimmedHabit && habitFrequency) {
+      const freqencyHistory: FrequencyHistoryEntry[] = [
+        {
+          effectiveFrom: getLocalDateKey(new Date()),
+          frequency: habitFrequency,
+        },
+      ]
+
       const newHabit: Habit = {
         id: crypto.randomUUID(),
         name: trimmedHabit,
-        completedDates: completedDate,
+        completedDates: [],
+        dateAdded: getLocalDateKey(new Date()),
+        frequency: habitFrequency,
+        frequencyHistory: freqencyHistory,
       }
 
       setHabitsList((prev) => [...prev, newHabit])
       setHabitName('')
-      setCompletedDates([])
+      setHabitFrequency({ type: 'daily' })
     }
-  }
-
-  function handleOnAddDateCompletedOn() {
-    setCompletedDates((prev) => [...prev, habitCompletedOn])
   }
 
   return (
@@ -39,22 +46,10 @@ function AddHabit({ setHabitsList }: AddHabitProps) {
         <br />
         <input value={habitName} onChange={(e) => setHabitName(e.target.value)} />
         <br />
-      </div>
-      {/* add past completion dates for testing */}
-      <div>
-        <label htmlFor="habitCompletedOn">Completed on</label>
+        <label htmlFor="habitFrequency">Habit frequency</label>
         <br />
-        <input type="date" onChange={(e) => setHabitCompletedOn(e.target.value)} />
-        <br />
-        <button onClick={handleOnAddDateCompletedOn}>Add date</button>
+        <FrequencySelector habitFrequency={habitFrequency} setHabitFrequency={setHabitFrequency} />
       </div>
-      {completedDate.length !== 0
-        ? completedDate.map((date, index) => (
-            <ul key={`${date}-${index}`}>
-              <li>{date}</li>
-            </ul>
-          ))
-        : null}
       <div>
         <button onClick={handleOnAddHabit}>Add habit</button>
       </div>

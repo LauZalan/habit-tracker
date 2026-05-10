@@ -1,3 +1,4 @@
+import { Fragment } from 'react/jsx-runtime'
 import type { CalendarDetails } from './types'
 
 const ROWS = 6
@@ -9,6 +10,7 @@ type DrawCalendarProps = {
   detailedRow: number | null
   setDetailedDateId: React.Dispatch<React.SetStateAction<number | null>>
   setDetailedRow: React.Dispatch<React.SetStateAction<number | null>>
+  toggleHabitDoneOnDate: (id: string, date: string) => void
 }
 
 function DrawCalendar({
@@ -17,6 +19,7 @@ function DrawCalendar({
   detailedRow,
   setDetailedDateId,
   setDetailedRow,
+  toggleHabitDoneOnDate,
 }: DrawCalendarProps) {
   function toggleDetailedDateId(id: number) {
     if (detailedDateId === null || id !== detailedDateId) {
@@ -30,8 +33,8 @@ function DrawCalendar({
     <table>
       <tbody>
         {[...Array(ROWS).keys()].map((row) => (
-          <div>
-            <tr key={row}>
+          <Fragment key={row}>
+            <tr>
               {[...Array(COLS).keys()].map((col) => (
                 <td
                   key={row * COLS + col}
@@ -60,7 +63,7 @@ function DrawCalendar({
                 </td>
               ))}
             </tr>
-            {detailedDateId && detailedRow === row ? (
+            {detailedDateId !== null && detailedRow === row ? (
               <tr>
                 <td
                   colSpan={7}
@@ -73,13 +76,32 @@ function DrawCalendar({
                   }}
                 >
                   {calendarDetails.cells[detailedDateId].cellDate}
-                  {calendarDetails.cells[detailedDateId].cellHabits.map((habit) => (
-                    <p key={habit.id}>{habit.name}</p>
-                  ))}
+                  {calendarDetails.cells[detailedDateId].editable
+                    ? calendarDetails.cells[detailedDateId].cellHabits.map((habit) => (
+                        <Fragment key={habit.id}>
+                          <br />
+                          <label>{habit.name}</label>
+                          <input
+                            type="checkbox"
+                            checked={habit.completedDates.includes(
+                              calendarDetails.cells[detailedDateId].cellDate,
+                            )}
+                            onChange={() =>
+                              toggleHabitDoneOnDate(
+                                habit.id,
+                                calendarDetails.cells[detailedDateId].cellDate,
+                              )
+                            }
+                          />
+                        </Fragment>
+                      ))
+                    : calendarDetails.cells[detailedDateId].cellHabits.map((habit) => (
+                        <p key={habit.id}>{habit.name}</p>
+                      ))}
                 </td>
               </tr>
             ) : null}
-          </div>
+          </Fragment>
         ))}
       </tbody>
     </table>
