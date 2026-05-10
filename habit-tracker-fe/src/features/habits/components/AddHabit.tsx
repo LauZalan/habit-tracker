@@ -10,9 +10,7 @@ type AddHabitProps = {
 
 function AddHabit({ setHabitsList }: AddHabitProps) {
   const [habitName, setHabitName] = useState('')
-  const [completedDate, setCompletedDates] = useState<string[]>([])
-
-  const [habitFrequency, setHabitFrequency] = useState<HabitFrequencies | null>(null)
+  const [habitFrequency, setHabitFrequency] = useState<HabitFrequencies | null>({ type: 'daily' })
 
   function handleOnAddHabit() {
     const trimmedHabit = habitName.trim()
@@ -28,7 +26,7 @@ function AddHabit({ setHabitsList }: AddHabitProps) {
       const newHabit: Habit = {
         id: crypto.randomUUID(),
         name: trimmedHabit,
-        completedDates: completedDate,
+        completedDates: [],
         dateAdded: getLocalDateKey(new Date()),
         frequency: habitFrequency,
         frequencyHistory: freqencyHistory,
@@ -36,8 +34,7 @@ function AddHabit({ setHabitsList }: AddHabitProps) {
 
       setHabitsList((prev) => [...prev, newHabit])
       setHabitName('')
-      setCompletedDates([])
-      setHabitFrequency(null)
+      setHabitFrequency({ type: 'daily' })
     }
   }
 
