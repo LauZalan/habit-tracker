@@ -108,3 +108,8 @@ code {
   background: var(--code-bg);
 }
 
+table,
+th,
+td {
+  border: 1px solid grey;
+}

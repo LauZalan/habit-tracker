@@ -12,10 +12,12 @@ import { isHabitScheduledOnDate } from '../features/calendar/helpers/getCalendar
 
 import { filterUiReducer } from '../features/habits/reducers/dashboardUiReducer'
 
-import type { Habit, HabitFrequencies } from '../features/habits/types'
+import type { Habit, HabitFrequencies, HabitListColumn } from '../features/habits/types'
 import type { UiState } from '../features/habits/reducers/dashboardUiReducer'
 
 import { initialUiState } from '../features/habits/reducers/dashboardUiReducer'
+import EditHabit from '../features/habits/components/EditHabit'
+import Checkbox from '../features/habits/components/Checkbox'
 
 function DashboardPage() {
   const habits = useHabits()
@@ -104,6 +106,20 @@ function DashboardPage() {
   }
 
   const filteredHabits = filterHabits(habits.habitsList, ui.filter)
+  const habitsToday = habits.habitsList.filter((habit) =>
+    isHabitScheduledOnDate(habit, currentDate),
+  )
+
+  const allHabitsColumns: HabitListColumn[] = [
+    { id: '1', label: 'Habit' },
+    { id: '2', label: 'Delete' },
+    { id: '3', label: 'Edit' },
+  ]
+
+  const todayHabitsColumns: HabitListColumn[] = [
+    { id: '1', label: 'Habit' },
+    { id: '2', label: 'Done' },
+  ]
 
   return (
     <>
@@ -117,16 +133,36 @@ function DashboardPage() {
       <div>
         <HabitSummary habitsList={habits.habitsList} />
       </div>
+      <h2>Habit list</h2>
       <div>
-        <h2>Habit list</h2>
+        <h3>All habits</h3>
         <HabitList
           habitsList={filteredHabits}
-          editedHabit={ui.editedHabit}
-          setEditedHabit={handleOnEditedHabitChange}
-          setEditedHabitFrequency={handleOnEditedHabitFrequencyChange}
-          toggleHabitDoneToday={toggleHabitDoneToday}
-          deleteHabit={deleteHabit}
-          editHabit={editHabit}
+          columns={allHabitsColumns}
+          renderAttachment={(habit) => (
+            <EditHabit
+              originalHabit={habit}
+              editedHabit={ui.editedHabit}
+              setEditedHabit={handleOnEditedHabitChange}
+              setEditedHabitFrequency={handleOnEditedHabitFrequencyChange}
+              editHabit={editHabit}
+              deleteHabit={deleteHabit}
+            />
+          )}
+        />
+      </div>
+      <div>
+        <h3>Habits Today</h3>
+        <HabitList
+          habitsList={habitsToday}
+          columns={todayHabitsColumns}
+          renderAttachment={(habit) => (
+            <Checkbox
+              habit={habit}
+              currentDate={currentDate}
+              toggleHabitDoneToday={toggleHabitDoneToday}
+            />
+          )}
         />
       </div>
     </>
