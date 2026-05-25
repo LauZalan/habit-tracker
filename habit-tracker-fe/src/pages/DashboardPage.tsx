@@ -106,9 +106,7 @@ function DashboardPage() {
   }
 
   const filteredHabits = filterHabits(habits.habitsList, ui.filter)
-  const habitsToday = habits.habitsList.filter((habit) =>
-    isHabitScheduledOnDate(habit, currentDate),
-  )
+  const habitsToday = filteredHabits.filter((habit) => isHabitScheduledOnDate(habit, currentDate))
 
   const allHabitsColumns: HabitListColumn[] = [
     { id: '1', label: 'Habit' },

@@ -4,7 +4,7 @@ import type { ReactElement } from 'react'
 type HabitListProps = {
   habitsList: Habit[]
   columns: HabitListColumn[]
-  renderAttachment: ((habit: Habit) => ReactElement) | (() => null)
+  renderAttachment: (habit: Habit) => ReactElement
 }
 
 function HabitList({ habitsList, columns, renderAttachment }: HabitListProps) {
