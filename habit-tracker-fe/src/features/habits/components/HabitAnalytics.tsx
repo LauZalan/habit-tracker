@@ -41,11 +41,50 @@ function getCurrentStreak(habit: Habit, currentDate: string): number {
   return currentStreak
 }
 
+function getLastPrevSevenDaysCompletion(habit: Habit, currentDate: string): number[] {
+  let lastSevenDaysComp = 0
+  let prevSevenDaysComp = 0
+
+  const date = new Date(currentDate)
+  let endCounter = 0
+
+  while (endCounter != 14) {
+    if (isHabitScheduledOnDate(habit, getLocalDateKey(date))) {
+      if (habit.completedDates.includes(getLocalDateKey(date))) {
+        if (endCounter < 7) {
+          lastSevenDaysComp++
+        } else {
+          prevSevenDaysComp++
+        }
+      }
+      endCounter++
+    }
+
+    date.setDate(date.getDate() - 1)
+  }
+
+  return [lastSevenDaysComp, prevSevenDaysComp]
+}
+
 function HabitAnalytics({ habit, currentDate }: HabitAnalyticsProps) {
+  const completionCount = getCompletionCount(habit, currentDate)
+  const lastPrev = getLastPrevSevenDaysCompletion(habit, currentDate)
+  const lastSevenDaysComp = lastPrev[0]
+  const prevSevenDaysComp = lastPrev[1]
+
   return (
     <>
       <tr>
-        <td>{habit.completedDates.length + '/' + getCompletionCount(habit, currentDate)}</td>
+        <td>
+          {habit.completedDates.length +
+            '/' +
+            completionCount +
+            ' (' +
+            ((habit.completedDates.length / completionCount) * 100).toFixed(2) +
+            '%)'}
+        </td>
+        <td>{prevSevenDaysComp + '/7 (' + ((prevSevenDaysComp / 7) * 100).toFixed(2) + '%)'}</td>
+        <td>{lastSevenDaysComp + '/7 (' + ((lastSevenDaysComp / 7) * 100).toFixed(2) + '%)'}</td>
         <td>{getCurrentStreak(habit, currentDate)}</td>
       </tr>
     </>

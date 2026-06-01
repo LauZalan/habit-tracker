@@ -12,15 +12,25 @@ function AnalyticsPage() {
 
   const HabitsColumns: HabitListColumn[] = [
     { id: '1', label: 'Habit' },
-    { id: '2', label: 'Completion' },
-    { id: '3', label: 'Current Streak' },
+    { id: '2', label: 'Overall completion' },
+    { id: '3', label: 'Previous 7 shcduled completion' },
+    { id: '4', label: 'Last 7 shcduled completion' },
+    { id: '5', label: 'Current streak' },
   ]
 
   return (
     <div>
       <h1>Analytics</h1>
+      <h2>Weekly habits</h2>
       <HabitList
-        habitsList={habits}
+        habitsList={habits.filter((habit) => habit.frequency.type == 'weekly')}
+        columns={HabitsColumns}
+        renderAttachment={(habit) => <HabitAnalytics habit={habit} currentDate={currentDate} />}
+      />
+      <br />
+      <h2>Daily habits</h2>
+      <HabitList
+        habitsList={habits.filter((habit) => habit.frequency.type == 'daily')}
         columns={HabitsColumns}
         renderAttachment={(habit) => <HabitAnalytics habit={habit} currentDate={currentDate} />}
       />
