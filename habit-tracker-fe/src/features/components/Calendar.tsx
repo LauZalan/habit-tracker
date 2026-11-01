@@ -1,22 +1,22 @@
 import { Fragment } from 'react/jsx-runtime'
-import type { CalendarDetails } from './types'
+import type { CalendarDetails } from '../calendar/types'
 
 const ROWS = 6
 const COLS = 7
 
-type DrawCalendarProps = {
+type CalendarProps = {
   calendarDetails: CalendarDetails
   detailedDateId: number | null
   toggleDetailedDateId: (id: number) => void
   toggleHabitDoneOnDate: (id: string, date: string) => void
 }
 
-function DrawCalendar({
+function Calendar({
   calendarDetails,
   detailedDateId,
   toggleDetailedDateId,
   toggleHabitDoneOnDate,
-}: DrawCalendarProps) {
+}: CalendarProps) {
   const detailedRow = detailedDateId === null ? null : Math.floor(detailedDateId / 7)
 
   return (
@@ -91,4 +91,4 @@ function DrawCalendar({
   )
 }
 
-export default DrawCalendar
+export default Calendar

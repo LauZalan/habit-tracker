@@ -1,4 +1,4 @@
-import DrawCalendar from '../features/calendar/DrawCalendar'
+import Calendar from '../features/components/Calendar'
 import { useCalendar } from '../features/calendar/hooks/useCalendar'
 
 function CalendarPage() {
@@ -12,11 +12,14 @@ function CalendarPage() {
         <h2>
           {year}. {month + 1 < 10 ? '0' + (month + 1) : month + 1}.
         </h2>
-        <button onClick={() => stepMonth(-1)}>Prev month</button>
+        <button onClick={() => stepMonth(-1)}>Previous month</button>
         <button onClick={() => stepMonth(1)}>Next month</button>
       </div>
       <div>
-        <DrawCalendar
+        <button onClick={() => stepMonth(0)}>Jump to today</button>
+      </div>
+      <div>
+        <Calendar
           calendarDetails={calendarDetails}
           detailedDateId={detailedDateId}
           toggleDetailedDateId={toggleDetailedDateId}

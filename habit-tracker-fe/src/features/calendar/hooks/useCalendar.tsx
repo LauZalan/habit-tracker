@@ -21,6 +21,9 @@ export function useCalendar() {
     } else if (month + offset < 0) {
       setYear(year - 1)
       setMonth(11)
+    } else if (offset == 0) {
+      setYear(new Date().getFullYear())
+      setMonth(new Date().getMonth())
     } else {
       setMonth(month + offset)
     }
