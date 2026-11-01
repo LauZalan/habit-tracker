@@ -1,11 +1,13 @@
 import { createContext, useContext } from 'react'
 
-import type { Habit } from '../types'
+import type { Habit, HabitFrequencies } from '../types'
 
 type HabitsContextValue = {
   habitsList: Habit[]
   setHabitsList: React.Dispatch<React.SetStateAction<Habit[]>>
   toggleHabitDoneOnDate: (id: string, date: string) => void
+  editHabit: (id: string, updatedHabitName: string, updatedHabitFreqeuncy: HabitFrequencies) => void
+  deleteHabit: (id: string) => void
 }
 
 export const HabitsContext = createContext<HabitsContextValue | null>(null)

@@ -14,7 +14,7 @@ type UiAction =
   | { type: 'search/set'; payload: UiState['filter'] }
   | { type: 'editHabit/set'; payload: UiState['editedHabit'] }
 
-export function filterUiReducer(state: UiState, action: UiAction): UiState {
+export function dashboardUiReducer(state: UiState, action: UiAction): UiState {
   switch (action.type) {
     case 'search/set':
       return { ...state, filter: action.payload }

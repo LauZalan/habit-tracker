@@ -3,17 +3,17 @@ import type { Habit } from '../types'
 type CheckboxProps = {
   habit: Habit
   currentDate: string
-  toggleHabitDoneToday: (id: string) => void
+  toggleHabitDone: (id: string, date: string) => void
 }
 
-function Checkbox({ habit, currentDate, toggleHabitDoneToday }: CheckboxProps) {
+function Checkbox({ habit, currentDate, toggleHabitDone }: CheckboxProps) {
   return (
     <tr>
       <td>
         <input
           type="checkbox"
           checked={habit.completedDates.includes(currentDate)}
-          onChange={() => toggleHabitDoneToday(habit.id)}
+          onChange={() => toggleHabitDone(habit.id, currentDate)}
         />
       </td>
     </tr>
