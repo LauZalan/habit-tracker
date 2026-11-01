@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useHabits } from '../features/habits/context/HabitsContext'
 import DrawCalendar from '../features/calendar/DrawCalendar'
-import getCalendarDetails from '../features/calendar/helpers/getCalendarDetails'
+import getCalendarDetails from '../features/calendar/helpers/calendarHelper'
 
 function CalendarPage() {
   const habits = useHabits()

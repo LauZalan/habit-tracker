@@ -1,5 +1,5 @@
-import { isHabitScheduledOnDate } from '../../calendar/helpers/getCalendarDetails'
-import { getLocalDateKey } from '../helpers/localDateHelper'
+import { isHabitScheduledOnDate } from '../../calendar/helpers/calendarHelper'
+import { getLocalDateKey, parseLocalDate } from '../helpers/localDateHelper'
 
 import type { Habit } from '../types'
 
@@ -11,8 +11,8 @@ type HabitAnalyticsProps = {
 function getCompletionCount(habit: Habit, currentDate: string): number {
   let completionCount = 0
 
-  const start = new Date(habit.dateAdded)
-  const end = new Date(currentDate)
+  const start = parseLocalDate(habit.dateAdded)
+  const end = parseLocalDate(currentDate)
 
   for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
     if (isHabitScheduledOnDate(habit, getLocalDateKey(date))) {
@@ -25,8 +25,8 @@ function getCompletionCount(habit: Habit, currentDate: string): number {
 function getCurrentStreak(habit: Habit, currentDate: string): number {
   let currentStreak = 0
 
-  const start = new Date(currentDate)
-  const end = new Date(habit.dateAdded)
+  const start = parseLocalDate(currentDate)
+  const end = parseLocalDate(habit.dateAdded)
 
   for (let date = start; date >= end; date.setDate(date.getDate() - 1)) {
     if (isHabitScheduledOnDate(habit, getLocalDateKey(date))) {
@@ -41,50 +41,63 @@ function getCurrentStreak(habit: Habit, currentDate: string): number {
   return currentStreak
 }
 
-function getLastPrevSevenDaysCompletion(habit: Habit, currentDate: string): number[] {
-  let lastSevenDaysComp = 0
-  let prevSevenDaysComp = 0
+function getThirtyDayConsistency(habit: Habit, currentDate: string): string {
+  let thirtyDayCompletion = 0
+  let thirtyDayOccurance = 0
 
-  const date = new Date(currentDate)
-  let endCounter = 0
+  const start = parseLocalDate(currentDate)
+  const thirtyDayOffset = parseLocalDate(currentDate)
+  thirtyDayOffset.setDate(start.getDate() - 29)
 
-  while (endCounter != 14) {
+  for (let date = start; date >= thirtyDayOffset; date.setDate(date.getDate() - 1)) {
     if (isHabitScheduledOnDate(habit, getLocalDateKey(date))) {
+      thirtyDayOccurance++
       if (habit.completedDates.includes(getLocalDateKey(date))) {
-        if (endCounter < 7) {
-          lastSevenDaysComp++
-        } else {
-          prevSevenDaysComp++
-        }
+        thirtyDayCompletion++
       }
-      endCounter++
     }
-
-    date.setDate(date.getDate() - 1)
   }
 
-  return [lastSevenDaysComp, prevSevenDaysComp]
+  if (thirtyDayOccurance == 0) {
+    return '-'
+  }
+
+  return ((thirtyDayCompletion / thirtyDayOccurance) * 100).toFixed(2) + ' %'
+}
+
+function getMostMissedWeekday(habit: Habit, currentDate: string): string {
+  const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  const missedOccurancesByDay = new Array<number>(7).fill(0)
+
+  const start = parseLocalDate(currentDate)
+  const end = parseLocalDate(habit.dateAdded)
+
+  for (let date = start; date >= end; date.setDate(date.getDate() - 1)) {
+    if (isHabitScheduledOnDate(habit, getLocalDateKey(date))) {
+      if (!habit.completedDates.includes(getLocalDateKey(date))) {
+        missedOccurancesByDay[(date.getDay() + 6) % 7]++
+      }
+    }
+  }
+
+  if (Math.max(...missedOccurancesByDay) == 0) {
+    return '-'
+  }
+
+  return weekdays[missedOccurancesByDay.indexOf(Math.max(...missedOccurancesByDay))]
 }
 
 function HabitAnalytics({ habit, currentDate }: HabitAnalyticsProps) {
   const completionCount = getCompletionCount(habit, currentDate)
-  const lastPrev = getLastPrevSevenDaysCompletion(habit, currentDate)
-  const lastSevenDaysComp = lastPrev[0]
-  const prevSevenDaysComp = lastPrev[1]
+  const thirtyDayConsistency = getThirtyDayConsistency(habit, currentDate)
+  const mostMissedWeekday = getMostMissedWeekday(habit, currentDate)
 
   return (
     <>
       <tr>
-        <td>
-          {habit.completedDates.length +
-            '/' +
-            completionCount +
-            ' (' +
-            ((habit.completedDates.length / completionCount) * 100).toFixed(2) +
-            '%)'}
-        </td>
-        <td>{prevSevenDaysComp + '/7 (' + ((prevSevenDaysComp / 7) * 100).toFixed(2) + '%)'}</td>
-        <td>{lastSevenDaysComp + '/7 (' + ((lastSevenDaysComp / 7) * 100).toFixed(2) + '%)'}</td>
+        <td>{habit.completedDates.length + '/' + completionCount}</td>
+        <td>{thirtyDayConsistency}</td>
+        <td>{mostMissedWeekday}</td>
         <td>{getCurrentStreak(habit, currentDate)}</td>
       </tr>
     </>

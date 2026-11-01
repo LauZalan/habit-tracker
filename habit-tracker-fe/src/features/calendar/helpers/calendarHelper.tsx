@@ -1,4 +1,4 @@
-import { getLocalDateKey } from '../../habits/helpers/localDateHelper'
+import { getLocalDateKey, parseLocalDate } from '../../habits/helpers/localDateHelper'
 
 import type { CalendarDetails, CalendarCell } from '../types'
 import type { Habit, Weekday } from '../../habits/types'
@@ -14,7 +14,7 @@ export function isHabitScheduledOnDate(habit: Habit, dateString: string): boolea
       if (freqencyHistoryEntry.frequency.type === 'daily') {
         return true
       } else if (freqencyHistoryEntry.frequency.type === 'weekly') {
-        const dayOfTheWeek = (new Date(dateString).getDay() + 6) % 7
+        const dayOfTheWeek = (parseLocalDate(dateString).getDay() + 6) % 7
         if (freqencyHistoryEntry.frequency.days.includes(weekdays[dayOfTheWeek])) {
           return true
         } else {

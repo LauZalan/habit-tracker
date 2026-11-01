@@ -8,7 +8,7 @@ import HabitSummary from '../features/habits/components/HabitSummary'
 import HabitList from '../features/habits/components/HabitList'
 
 import { getLocalDateKey } from '../features/habits/helpers/localDateHelper'
-import { isHabitScheduledOnDate } from '../features/calendar/helpers/getCalendarDetails'
+import { isHabitScheduledOnDate } from '../features/calendar/helpers/calendarHelper'
 
 import { filterUiReducer } from '../features/habits/reducers/dashboardUiReducer'
 

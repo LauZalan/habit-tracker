@@ -13,8 +13,8 @@ function AnalyticsPage() {
   const HabitsColumns: HabitListColumn[] = [
     { id: '1', label: 'Habit' },
     { id: '2', label: 'Overall completion' },
-    { id: '3', label: 'Previous 7 shcduled completion' },
-    { id: '4', label: 'Last 7 shcduled completion' },
+    { id: '3', label: '30-day consistency' },
+    { id: '4', label: 'Most missed weekday' },
     { id: '5', label: 'Current streak' },
   ]
 
