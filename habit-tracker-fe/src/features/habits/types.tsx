@@ -15,3 +15,8 @@ export type FrequencyHistoryEntry = {
   effectiveFrom: string
   frequency: HabitFrequencies
 }
+
+export type HabitListColumn = {
+  id: string
+  label: string
+}

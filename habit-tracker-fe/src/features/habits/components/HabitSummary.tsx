@@ -1,6 +1,6 @@
 import { getLocalDateKey } from '../helpers/localDateHelper'
 import type { Habit } from '../types'
-import { isHabitScheduledOnDate } from '../../calendar/helpers/getCalendarDetails'
+import { isHabitScheduledOnDate } from '../../calendar/helpers/calendarHelper'
 
 function HabitSummary({ habitsList }: { habitsList: Habit[] }) {
   const currentDate = getLocalDateKey(new Date())
