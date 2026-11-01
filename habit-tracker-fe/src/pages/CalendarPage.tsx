@@ -1,30 +1,9 @@
-import { useState } from 'react'
-
-import { useHabits } from '../features/habits/context/HabitsContext'
 import DrawCalendar from '../features/calendar/DrawCalendar'
-import getCalendarDetails from '../features/calendar/helpers/calendarHelper'
+import { useCalendar } from '../features/calendar/hooks/useCalendar'
 
 function CalendarPage() {
-  const habits = useHabits()
-
-  const [month, setMonth] = useState(new Date().getMonth())
-  const [year, setYear] = useState(new Date().getFullYear())
-
-  const [detailedDateId, setDetailedDateId] = useState<number | null>(null)
-  const [detailedRow, setDetailedRow] = useState<number | null>(null)
-
-  function stepMonth(currentMonth: number, offset: number) {
-    setDetailedRow(null)
-    if (currentMonth + offset > 11) {
-      setYear(year + 1)
-      setMonth(0)
-    } else if (currentMonth + offset < 0) {
-      setYear(year - 1)
-      setMonth(11)
-    } else {
-      setMonth(currentMonth + offset)
-    }
-  }
+  const { habits, year, month, detailedDateId, stepMonth, toggleDetailedDateId, calendarDetails } =
+    useCalendar()
 
   return (
     <div>
@@ -33,16 +12,14 @@ function CalendarPage() {
         <h2>
           {year}. {month + 1 < 10 ? '0' + (month + 1) : month + 1}.
         </h2>
-        <button onClick={() => stepMonth(month, -1)}>Prev month</button>
-        <button onClick={() => stepMonth(month, 1)}>Next month</button>
+        <button onClick={() => stepMonth(-1)}>Prev month</button>
+        <button onClick={() => stepMonth(1)}>Next month</button>
       </div>
       <div>
         <DrawCalendar
-          calendarDetails={getCalendarDetails(year, month, habits.habitsList)}
+          calendarDetails={calendarDetails}
           detailedDateId={detailedDateId}
-          detailedRow={detailedRow}
-          setDetailedDateId={setDetailedDateId}
-          setDetailedRow={setDetailedRow}
+          toggleDetailedDateId={toggleDetailedDateId}
           toggleHabitDoneOnDate={habits.toggleHabitDoneOnDate}
         />
       </div>

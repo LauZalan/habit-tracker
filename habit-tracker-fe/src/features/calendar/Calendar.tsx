@@ -7,27 +7,17 @@ const COLS = 7
 type DrawCalendarProps = {
   calendarDetails: CalendarDetails
   detailedDateId: number | null
-  detailedRow: number | null
-  setDetailedDateId: React.Dispatch<React.SetStateAction<number | null>>
-  setDetailedRow: React.Dispatch<React.SetStateAction<number | null>>
+  toggleDetailedDateId: (id: number) => void
   toggleHabitDoneOnDate: (id: string, date: string) => void
 }
 
 function DrawCalendar({
   calendarDetails,
   detailedDateId,
-  detailedRow,
-  setDetailedDateId,
-  setDetailedRow,
+  toggleDetailedDateId,
   toggleHabitDoneOnDate,
 }: DrawCalendarProps) {
-  function toggleDetailedDateId(id: number) {
-    if (detailedDateId === null || id !== detailedDateId) {
-      setDetailedDateId(id)
-    } else {
-      setDetailedDateId(null)
-    }
-  }
+  const detailedRow = detailedDateId === null ? null : Math.floor(detailedDateId / 7)
 
   return (
     <table>
@@ -50,14 +40,7 @@ function DrawCalendar({
                   {calendarDetails.cells[row * COLS + col].cellHabits.length > 0 ? (
                     <div>
                       <p>{calendarDetails.cells[row * COLS + col].cellHabits.length} items</p>
-                      <button
-                        onClick={() => (
-                          toggleDetailedDateId(row * COLS + col),
-                          setDetailedRow(row)
-                        )}
-                      >
-                        More
-                      </button>
+                      <button onClick={() => toggleDetailedDateId(row * COLS + col)}>More</button>
                     </div>
                   ) : null}
                 </td>

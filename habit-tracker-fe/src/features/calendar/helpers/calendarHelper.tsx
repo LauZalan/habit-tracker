@@ -1,11 +1,11 @@
-import { getLocalDateKey, parseLocalDate } from '../../habits/helpers/localDateHelper'
+import { parseLocalDate, getLocalDateKey } from '../../habits/helpers/localDateHelper'
 
-import type { CalendarDetails, CalendarCell } from '../types'
 import type { Habit, Weekday } from '../../habits/types'
-
-const NUMOFCELLS = 42
+import type { CalendarCell, CalendarDetails } from '../types'
 
 const weekdays: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
+const NUMOFCELLS = 42
 
 export function isHabitScheduledOnDate(habit: Habit, dateString: string): boolean {
   for (let i = habit.frequencyHistory.length - 1; i >= 0; i--) {
@@ -28,7 +28,7 @@ export function isHabitScheduledOnDate(habit: Habit, dateString: string): boolea
   return false
 }
 
-function getCalendarDetails(year: number, month: number, habits: Habit[]): CalendarDetails {
+export function getCalendarDetails(year: number, month: number, habits: Habit[]): CalendarDetails {
   const calendarDetails: CalendarDetails = {
     year: year,
     month: month,
@@ -68,5 +68,3 @@ function getCalendarDetails(year: number, month: number, habits: Habit[]): Calen
 
   return calendarDetails
 }
-
-export default getCalendarDetails
